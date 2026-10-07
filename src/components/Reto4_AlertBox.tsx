@@ -1,21 +1,78 @@
-// TODO [RETO 4]: Implementa un AlertBox semántico que reciba un tipo
-// (success, warning, error), un mensaje y un callback para cerrarlo.
-//
-// Pregunta 1: ¿Cómo usar un Union Type para limitar los tipos permitidos?
-// Pregunta 2: ¿Cómo muestras el botón de cierre SOLO cuando el padre
-//             pasa una función onClose, sin romper el resto del layout?
-// Prompt IA: "No me des la respuesta. Hazme 3 preguntas para descubrir
-//             cómo mapear un string (tipo de alerta) a un color específico."
-
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-// TODO: Define la interface AlertBoxProps
+type AlertType = 'success' | 'warning' | 'error';
 
-// TODO: Implementa el componente
+interface AlertBoxProps {
+  type: AlertType;
+  message: string;
+  onClose?: () => void;
+}
 
-// TODO: Define los estilos
+const styles = StyleSheet.create({
+  box: {
+    borderRadius: 12,
+    padding: 16,
+  },
+  success: {
+    backgroundColor: '#dcfce7',
+  },
+  warning: {
+    backgroundColor: '#fef3c7',
+  },
+  error: {
+    backgroundColor: '#fee2e2',
+  },
+  header: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  title: {
+    color: '#1f2937',
+    fontSize: 14,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
+  message: {
+    color: '#334155',
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  closeButton: {
+    alignItems: 'center',
+    borderRadius: 999,
+    height: 24,
+    justifyContent: 'center',
+    width: 24,
+  },
+  closeText: {
+    color: '#1f2937',
+    fontSize: 18,
+    fontWeight: '700',
+    lineHeight: 20,
+  },
+});
 
-export default function AlertBox() {
-  return null;
+const typeStyles = {
+  success: styles.success,
+  warning: styles.warning,
+  error: styles.error,
+} as const;
+
+export default function AlertBox({ type, message, onClose }: AlertBoxProps) {
+  return (
+    <View style={[styles.box, typeStyles[type]]}>
+      <View style={styles.header}>
+        <Text style={styles.title}>{type.toUpperCase()}</Text>
+        {onClose ? (
+          <Pressable accessibilityRole="button" onPress={onClose} style={styles.closeButton}>
+            <Text style={styles.closeText}>×</Text>
+          </Pressable>
+        ) : null}
+      </View>
+      <Text style={styles.message}>{message}</Text>
+    </View>
+  );
 }

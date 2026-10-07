@@ -1,23 +1,72 @@
-// TODO [RETO 1]: Diseña un botón reutilizable que reciba un texto
-// visible y una acción al presionarlo. Debe soportar al menos 3
-// variantes visuales (primary, secondary, danger).
-//
-// Pregunta 1: ¿Qué props necesita tu componente para ser reutilizable
-//             en 3 lugares distintos sin duplicar código?
-// Pregunta 2: ¿Cómo harías que la variante cambie el estilo sin usar
-//             condicionales anidados gigantes?
-// Prompt IA: "No me des la respuesta. Hazme 3 preguntas para descubrir
-//             cómo tipar las props de un botón reutilizable."
-
 import React from 'react';
-import { Pressable, Text, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, Text } from 'react-native';
 
-// TODO: Define la interface CustomButtonProps
+interface CustomButtonProps {
+  label: string;
+  onPress?: () => void;
+  variant?: 'primary' | 'secondary' | 'danger';
+  disabled?: boolean;
+}
 
-// TODO: Implementa el componente
+const styles = StyleSheet.create({
+  button: {
+    alignItems: 'center',
+    borderRadius: 12,
+    justifyContent: 'center',
+    minHeight: 48,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+  },
+  primary: {
+    backgroundColor: '#2563eb',
+  },
+  secondary: {
+    backgroundColor: '#e2e8f0',
+  },
+  danger: {
+    backgroundColor: '#dc2626',
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+  pressed: {
+    opacity: 0.9,
+  },
+  label: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  labelDisabled: {
+    color: '#f8fafc',
+  },
+});
 
-// TODO: Define los estilos
+const variantStyles = {
+  primary: styles.primary,
+  secondary: styles.secondary,
+  danger: styles.danger,
+} as const;
 
-export default function CustomButton() {
-  return null;
+export default function CustomButton({
+  label,
+  onPress,
+  variant = 'primary',
+  disabled = false,
+}: CustomButtonProps) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      disabled={disabled}
+      onPress={onPress}
+      style={({ pressed }: { pressed: boolean }) => [
+        styles.button,
+        variantStyles[variant],
+        disabled && styles.disabled,
+        pressed && !disabled && styles.pressed,
+      ]}
+    >
+      <Text style={[styles.label, disabled && styles.labelDisabled]}>{label}</Text>
+    </Pressable>
+  );
 }

@@ -1,30 +1,47 @@
-// TODO [RETO FINAL]: Integra los 4 componentes (CustomButton, InfoCard,
-// StyledInput, AlertBox) en una sola pantalla para probarlos.
-//
-// Pregunta 1: ¿Cómo organizas el ScrollView para que no se corte el contenido?
-// Pregunta 2: ¿Qué estado necesitas para probar el StyledInput y el AlertBox aquí?
-// Prompt IA: "No me des la respuesta. Hazme 3 preguntas para descubrir
-//             cómo organizar múltiples componentes dentro de un contenedor seguro (SafeArea)."
-
 import React, { useState } from 'react';
-import { ScrollView, View, StyleSheet, SafeAreaView } from 'react-native';
-// TODO: Importa los componentes
+import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import AlertBox from '../components/Reto4_AlertBox';
+import CustomButton from '../components/Reto1_CustomButton';
+import InfoCard from '../components/Reto2_InfoCard';
+import StyledInput from '../components/Reto3_StyledInput';
 
 export default function Showcase() {
-  // TODO: Define estados de prueba
+  const [inputValue, setInputValue] = useState('');
+  const [showAlert, setShowAlert] = useState(true);
+
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.container}>
-        {/* TODO: Renderiza CustomButton */}
-        {/* TODO: Renderiza InfoCard */}
-        {/* TODO: Renderiza StyledInput */}
-        {/* TODO: Renderiza AlertBox */}
+        <CustomButton label="Guardar" variant="primary" onPress={() => undefined} />
+        <InfoCard
+          title="Diseño Atómico"
+          description="Practica la construcción de componentes reutilizables y semánticos."
+        />
+        <StyledInput
+          value={inputValue}
+          placeholder="Escribe tu nombre"
+          onChangeText={setInputValue}
+          error={inputValue.length > 0 && inputValue.length < 3}
+        />
+        {showAlert ? (
+          <AlertBox
+            type="warning"
+            message="Completa la información antes de continuar."
+            onClose={() => setShowAlert(false)}
+          />
+        ) : null}
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#FFF8E7' },
-  container: { padding: 20, gap: 20 }
+  safe: {
+    backgroundColor: '#FFF8E7',
+    flex: 1,
+  },
+  container: {
+    gap: 20,
+    padding: 20,
+  },
 });
